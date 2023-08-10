@@ -1,4 +1,4 @@
-# ADB-Automation-Tool
+# ADB Automation Tool
 
 This project provides a Bash script that automates the process of interacting with an Android device using ADB (Android Debug Bridge). It allows you to connect to multiple Android devices, retrieve device information, download data, run diagnostics, and reboot the devices.
 
