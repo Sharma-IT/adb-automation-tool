@@ -18,33 +18,33 @@ This project provides a Bash script that automates the process of interacting wi
 
 1. Clone the repository:
 
-```bash
+```
 git clone https://github.com/sharma-it/ADB-Automation-Tool.git
 ```
 
 2. Change into the project directory:
 
-```bash
+```
 cd ADB-automation-tool
 ```
 
 3. Make the script executable:
 
-```bash
+```
 chmod +x adb_automation.sh
 ```
 
 4. Run the script with the desired options:
 
-```bash
+```
 ./adb_automation.sh -d DEVICE_ID1 -d DEVICE_ID2 -s SOURCE_DIR -t TARGET_DIR -c COMMAND
 ```
 
-Replace 'DEVICE_ID1' and 'DEVICE_ID2' with the actual device IDs you want to interact with. You can specify multiple -d options to handle multiple devices. The -s option is used to specify the source directory for data download, and the -t option is used to specify the target directory for data transfer. The -c option allows you to execute a custom command on the devices.
+Replace `DEVICE_ID1` and `DEVICE_ID2` with the actual device IDs you want to interact with. You can specify multiple -d options to handle multiple devices. The -s option is used to specify the source directory for data download, and the -t option is used to specify the target directory for data transfer. The -c option allows you to execute a custom command on the devices.
 
 Example usage:
 
-```bash
+```
 ./adb_automation.sh -d ABC123 -d DEF456 -s /path/to/source -t /path/to/target -c "adb shell am force-stop com.example.app"
 ```
 
@@ -52,7 +52,7 @@ Example usage:
 
 Please note that you need to have ADB installed on your system and the devices connected via USB or accessible over the network.
 
-Feel free to customize the script or add additional functionality as needed.
+Feel free to customise the script or add additional functionality as needed.
 
 ## Logging
 
@@ -68,4 +68,4 @@ Shubham Sharma - [My LinkedIn](https://www.linkedin.com/in/sharma-it/) - shubham
 
 ## License
 
-This project is licensed under the GPL 3.0 License - see the [LICENSE](LICENCE) file for details.
+This project is licensed under the GPL 3.0 License - see the [LICENSE](LICENSE) file for details.
