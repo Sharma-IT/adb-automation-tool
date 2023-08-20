@@ -2,7 +2,7 @@
 
 This project provides a Bash script that automates the process of interacting with an Android device using ADB (Android Debug Bridge). It allows you to connect to multiple Android devices, retrieve device information, download data, run diagnostics, and reboot the devices.
 
-## Features
+# Features
 
 - Connect to an Android device using ADB
 - Retrieve device information (manufacturer, model, Android version)
@@ -10,11 +10,11 @@ This project provides a Bash script that automates the process of interacting wi
 - Run diagnostics commands on the Android device
 - Reboot the Android device
 
-## Prerequisites
+# Prerequisites
 
 - ADB (Android Debug Bridge) must be installed on your system. If you don't have ADB installed, please follow the instructions provided by the Android documentation to install it.
 
-## Usage
+# Usage
 
 1. Clone the repository:
 
@@ -54,18 +54,18 @@ Please note that you need to have ADB installed on your system and the devices c
 
 Feel free to customise the script or add additional functionality as needed.
 
-## Logging
+# Logging
 
 The script logs its execution details to a log file named 'script.log' in the same directory. You can refer to this log file for troubleshooting or reviewing the script's activity.
 
-## Contributing
+# Contributing
 
 Pull requests are welcomed. For major changes, please open an issue first to discuss what you would like to change.
 
-## Contact
+# Contact
 
 Shubham Sharma - [My LinkedIn](https://www.linkedin.com/in/sharma-it/) - shubhamsharma.emails@gmail.com.
 
-## License
+# License
 
 This project is licensed under the GPL 3.0 License - see the [LICENSE](LICENSE) file for details.
