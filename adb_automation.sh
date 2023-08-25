@@ -30,7 +30,7 @@ validate_device_id() {
 # Function to connect to an Android device
 connect_device() {
     adb -s $DEVICE_ID wait-for-device &>> $LOGFILE
-    [ $? -ne 0 ] && die"Failed to connect to device $DEVICE_ID"
+    [ $? -ne 0 ] && die "Failed to connect to device $DEVICE_ID"
 }
 
 # Function to retrieve device information
