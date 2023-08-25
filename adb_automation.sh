@@ -7,6 +7,11 @@ NC='\033[0m' # No Color
 
 LOGFILE=script.log
 
+die() {
+    printf "\33[2K\r\033[1;31m%s\033[0m\n" "$*" >&2
+    exit 1
+}
+
 # Function to log message to a file
 log() {
     echo "$(date): $@" >> $LOGFILE
@@ -14,28 +19,18 @@ log() {
 
 # Function to check if ADB is installed
 check_adb() {
-    if ! command -v adb &> /dev/null; then
-        echo -e "${RED}ADB could not be found. Please install it before running this script.${NC}"
-        exit
-    fi
+    command -v adb || die "ADB could not be found. Please install it before running this script."
 }
 
 # Function to validate device ID
 validate_device_id() {
-    if [ -z "$DEVICE_ID" ]; then
-        echo -e "${RED}No device ID provided. Exiting.${NC}"
-        exit 1
-    fi
+    [ -z "$DEVICE_ID" ] && die "No device ID provided. Exiting."
 }
 
 # Function to connect to an Android device
 connect_device() {
     adb -s $DEVICE_ID wait-for-device &>> $LOGFILE
-
-    if [ $? -ne 0 ]; then
-        echo -e "${RED}Failed to connect to device $DEVICE_ID${NC}"
-        exit 1
-    fi
+    [ $? -ne 0 ] && die "Failed to connect to device $DEVICE_ID"
 }
 
 # Function to retrieve device information
@@ -48,11 +43,7 @@ get_device_info() {
 # Function to download data
 download_data() {
     adb -s $DEVICE_ID pull $ANDROID_DIR $LOCAL_DIR &>> $LOGFILE
-
-    if [ $? -ne 0 ]; then
-        echo -e "${RED}Failed to download data from $ANDROID_DIR to $LOCAL_DIR${NC}"
-        exit 1
-    fi
+    [ $? -ne 0 ] && die "Failed to download data from $ANDROID_DIR to $LOCAL_DIR"
 }
 
 # Function to run custom command
@@ -61,9 +52,7 @@ execute_custom_command() {
     echo -e "${GREEN}Executing command on device $DEVICE_ID: $command${NC}"
     adb -s $DEVICE_ID shell $command &>> $LOGFILE
     
-    if [ $? -ne 0 ]; then
-        echo -e "${RED}Failed to execute command $command${NC}"
-    fi
+    [ $? -ne 0 ] && die "Failed to execute command $command"
 }
 
 # Function to reboot device
@@ -119,24 +108,13 @@ done
 # Validate inputs
 check_adb
 
-if [ -z "$DEVICE_IDS" ]; then
-    echo -e "${RED}No device IDs provided. Exiting.${NC}"
-    exit 1
-fi
+[ -z "$DEVICE_IDS" ] && die "No device IDs provided. Exiting."
 
-if [ -z "$ANDROID_DIR" ] || [ -z "$LOCAL_DIR" ]; then
-    echo -e "${RED}Source or target directory not defined. Exiting.${NC}"
-    exit 1
-fi
+[ -z "$ANDROID_DIR" ] || [ -z "$LOCAL_DIR" ] && die "Source or target directory not defined. Exiting."
 
-if [ ! -d "$ANDROID_DIR" ]; then
-    echo -e "${RED}Source directory '$ANDROID_DIR' does not exist. Exiting.${NC}"
-    exit 1
-fi
+[ ! -d "$ANDROID_DIR" ] && "Source directory '$ANDROID_DIR' does not exist. Exiting."
 
-if [ ! -d "$LOCAL_DIR" ]; then
-    mkdir -p "$LOCAL_DIR"
-fi
+[ ! -d "$LOCAL_DIR" ] && mkdir -p "$LOCAL_DIR"
 
 # Function to execute commands in parallel
 execute_parallel() {
