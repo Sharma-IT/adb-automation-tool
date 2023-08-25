@@ -56,7 +56,7 @@ Feel free to customise the script or add additional functionality as needed.
 
 # Logging
 
-The script logs its execution details to a log file named 'script.log' in the same directory. You can refer to this log file for troubleshooting or reviewing the script's activity.
+The script logs its execution details to a log file named ```script.log``` in the same directory. You can refer to this log file for troubleshooting or reviewing the script's activity.
 
 # Contributing
 
