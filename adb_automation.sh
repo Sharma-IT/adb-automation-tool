@@ -8,9 +8,16 @@ NC='\033[0m' # No Color
 
 LOGFILE=script.log
 
-die() {
-    printf "\033[2K\r${BOLDRED}%s${NC}\n" "$*" >&2
-    exit 1
+# Function to print error message with timestamp to stderr and log file, and exit with stack trace
+print_error() {
+  local timestamp=$(date +"%Y-%m-%d %H:%M:%S")
+  echo "$timestamp: $1" >> errors.log
+  printf "%s: ${BOLDRED}%s${NC}\n" "$timestamp" "$1" >&2
+  echo "Stack trace:" >&2
+  for ((i=${#BASH_SOURCE[@]}-1; i>=0; i--)); do
+    echo " ${BASH_SOURCE[i]}:${BASH_LINENO[$i]}" >&2 
+  done
+  exit 1
 }
 
 # Function to log message to a file
@@ -20,18 +27,18 @@ log() {
 
 # Function to check if ADB is installed
 check_adb() {
-    command -v adb || die "ADB could not be found. Please install it before running this script."
+    command -v adb || print_error "ADB could not be found. Please install it before running this script."
 }
 
 # Function to validate device ID
 validate_device_id() {
-    [ -z "$DEVICE_ID" ] && die "No device ID provided. Exiting."
+    [ -z "$DEVICE_ID" ] && print_error "No device ID provided. Exiting."
 }
 
 # Function to connect to an Android device
 connect_device() {
     adb -s $DEVICE_ID wait-for-device &>> $LOGFILE
-    [ $? -ne 0 ] && die "Failed to connect to device $DEVICE_ID"
+    [ $? -ne 0 ] && print_error "Failed to connect to device $DEVICE_ID"
 }
 
 # Function to retrieve device information
@@ -44,7 +51,7 @@ get_device_info() {
 # Function to download data
 download_data() {
     adb -s $DEVICE_ID pull $ANDROID_DIR $LOCAL_DIR &>> $LOGFILE
-    [ $? -ne 0 ] && die "Failed to download data from $ANDROID_DIR to $LOCAL_DIR"
+    [ $? -ne 0 ] && print_error "Failed to download data from $ANDROID_DIR to $LOCAL_DIR"
 }
 
 # Function to run custom command
@@ -53,7 +60,7 @@ execute_custom_command() {
     echo -e "${BOLDBOLDGREEN}Executing command on device $DEVICE_ID: $command${NC}"
     adb -s $DEVICE_ID shell $command &>> $LOGFILE
     
-    [ $? -ne 0 ] && die "Failed to execute command $command"
+    [ $? -ne 0 ] && print_error "Failed to execute command $command"
 }
 
 # Function to reboot device
@@ -109,9 +116,9 @@ done
 # Validate inputs
 check_adb
 
-[ -z "$DEVICE_IDS" ] && die "No device IDs provided. Exiting."
+[ -z "$DEVICE_IDS" ] && print_error "No device IDs provided. Exiting."
 
-[ -z "$ANDROID_DIR" ] || [ -z "$LOCAL_DIR" ] && die "Source or target directory not defined. Exiting."
+[ -z "$ANDROID_DIR" ] || [ -z "$LOCAL_DIR" ] && print_error "Source or target directory not defined. Exiting."
 
 [ ! -d "$ANDROID_DIR" ] && "Source directory '$ANDROID_DIR' does not exist. Exiting."
 
