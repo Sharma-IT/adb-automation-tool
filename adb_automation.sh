@@ -1,14 +1,15 @@
 #!/bin/bash
 
 # ANSI color codes
-RED='\033[0;31m'
-GREEN='\033[0;32m'
+BOLDRED='\033[1;31m'
+BOLDGREEN='\033[1;32m'
+BOLDYELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 LOGFILE=script.log
 
 die() {
-    printf "\33[2K\r\033[1;31m%s\033[0m\n" "$*" >&2
+    printf "\033[2K\r${BOLDRED}%s${NC}\n" "$*" >&2
     exit 1
 }
 
@@ -49,7 +50,7 @@ download_data() {
 # Function to run custom command
 execute_custom_command() {
     local command=$1
-    echo -e "${GREEN}Executing command on device $DEVICE_ID: $command${NC}"
+    echo -e "${BOLDBOLDGREEN}Executing command on device $DEVICE_ID: $command${NC}"
     adb -s $DEVICE_ID shell $command &>> $LOGFILE
     
     [ $? -ne 0 ] && die "Failed to execute command $command"
@@ -57,13 +58,13 @@ execute_custom_command() {
 
 # Function to reboot device
 reboot_device() {
-    echo -e "${RED}Are you sure you want to reboot device $DEVICE_ID? (y/n)${NC}"
+    echo -e "${BOLDYELLOW}Are you sure you want to reboot device $DEVICE_ID? (y/n)${NC}"
     read -r choice
 
     if [[ $choice =~ ^[Yy]$ ]]; then
         adb -s $DEVICE_ID reboot &>> $LOGFILE
     else
-        echo -e "${GREEN}Reboot canceled.${NC}"
+        echo -e "${BOLDGREEN}Reboot canceled.${NC}"
     fi
 }
 
@@ -99,7 +100,7 @@ while getopts ":hd:s:t:c:" opt; do
         CUSTOM_COMMAND=$OPTARG
         ;;
     \? )
-        echo -e "${RED}Invalid Option: -$OPTARG${NC}" 1>&2
+        echo -e "${BOLDRED}Invalid Option: -$OPTARG${NC}" 1>&2
         usage
         ;;
     esac
@@ -121,11 +122,11 @@ execute_parallel() {
     local command=$1
     local device_id=$2
 
-    echo -e "${GREEN}Executing command on device $device_id: $command${NC}"
+    echo -e "${BOLDGREEN}Executing command on device $device_id: $command${NC}"
     adb -s $device_id shell $command &>> $LOGFILE
 
     if [ $? -ne 0 ]; then
-        echo -e "${RED}Failed to execute command $command on device $device_id${NC}"
+        echo -e "${BOLDRED}Failed to execute command $command on device $device_id${NC}"
     fi
 }
 
